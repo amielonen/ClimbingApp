@@ -47,31 +47,52 @@ async function run() {
   await page.click(dd);
 
   // select all time
-  
+
   await page.waitForTimeout(10);
   await page.keyboard.press("ArrowDown");
   await page.keyboard.press("Enter");
-//väärä dropdown? valitaan statistiikka eikä reitit
+  //väärä dropdown? valitaan statistiikka eikä reitit
 
-await page.evaluate(() => {
-  window.scrollBy(0, window.innerHeight*2);
-});
+  await page.evaluate(() => {
+    window.scrollBy(0, window.innerHeight * 2);
+  });
 
-await page.waitForTimeout(1500);
-const grades = await page.$$("tbody")
+  await page.waitForTimeout(1500);
+  const grades = await page.$$("tbody");
+  /*
+const headers = await page.$$(
+  "#__layout > div > div > div > div > div.column-center.cell.auto > div > div.column-content-left.cell.auto > div > div > div.content-child > div:nth-child(9) > table > tbody:nth-child(2) > tr.sub-header > th"
+);
 
-grades.forEach(async grade => {
-    const text = await (await grade.getProperty("innerText")).jsonValue()
+console.log(headers)
+
+headers.forEach(async (h) => {
+    const text = await (await h.getProperty("innerText")).jsonValue();
     console.log(text)
+});*/
+
+const headers = await page.evaluate(() => {
+    return Array.from(document.querySelectorAll(".ascents-table tbody th")).map(h => h.textContent.replace(/(\r\n|\n|\r)/gm, "").trim())
 })
 
+console.log(headers)
 
-//seuraavaksi listasta pitää kaivaa kaikki info reiteistä
-//- greidi ei jokaiselle reitille, vaan greidin alla siihen kuuluvat nousut
-//  - greidi ja sen nousut kuuluvat samaan table bodyyn, eli voidaan käydä niitä yksi kerrallaan läpi
-//    - ekalla rivi th, jossa tekstinä greidi
-//        - välissä 1 turha rivi, seuraavalla rivillä muu data: reitin nimi, maa, cragi - kommentti - ascent type (FA?), tähdet/rating, DATE
-  }
+  const table =
+    "#__layout > div > div > div > div > div.column-center.cell.auto > div > div.column-content-left.cell.auto > div > div > div.content-child > div:nth-child(9) > table";
+
+
+  grades.forEach(async (grade) => {
+    //const text = await (await grade.getProperty("innerText")).jsonValue()
+    //console.log(text)
+    let gradez;
+  });
+
+  //seuraavaksi listasta pitää kaivaa kaikki info reiteistä
+  //- greidi ei jokaiselle reitille, vaan greidin alla siihen kuuluvat nousut
+  //  - greidi ja sen nousut kuuluvat samaan table bodyyn, eli voidaan käydä niitä yksi kerrallaan läpi
+  //    - ekalla rivi th, jossa tekstinä greidi
+  //        - välissä 1 turha rivi, seuraavalla rivillä muu data: reitin nimi, maa, cragi - kommentti - ascent type (FA?), tähdet/rating, DATE
+}
 
 
 
