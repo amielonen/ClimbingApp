@@ -53,6 +53,18 @@ async function run() {
   await page.keyboard.press("Enter");
 //väärä dropdown? valitaan statistiikka eikä reitit
 
+await page.evaluate(() => {
+  window.scrollBy(0, window.innerHeight*2);
+});
+
+await page.waitForTimeout(1500);
+const grades = await page.$$("tbody")
+
+grades.forEach(async grade => {
+    const text = await (await grade.getProperty("innerText")).jsonValue()
+    console.log(text)
+})
+
 
 //seuraavaksi listasta pitää kaivaa kaikki info reiteistä
 //- greidi ei jokaiselle reitille, vaan greidin alla siihen kuuluvat nousut
